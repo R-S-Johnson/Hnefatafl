@@ -1,0 +1,41 @@
+Pieces:
+  Defenders:
+    King
+    Pawn x12
+  Attackers:
+    Pawn x24
+Board:
+ 11x11
+ Top Left = (0, 0)
+ (5, 5) = King Space, not accessable by Pawn
+ (0, 0)/(10, 0)/(0, 10)/(10, 10) = Escape Space, not accessable by Pawn
+ (-1, -1) = Captured
+Actions:
+  Move: Any piece: ValidSpaceFromXY = Set[a=1->n]EACH[(X +- a, Y)and(X, Y +- a)] where n is distance to next piece
+  Capture: If moved piece new (X,Y) creates pattern Piece -> Opposite Piece -> Ally Piece/Escape Space, and Opposite Piece is not King, Opposite Piece is removed from the board
+  Capture King: If moved piece makes pattern from King(X,Y) where ALL[(X +- 1, Y)and(X, Y +- 1)] have Attacker Pieces, the King is removed from the board
+Gameplay:
+  Attackers go first, then alternating turns
+  Turn = player initiated move, then Capture and Capture King checks
+Win Conditions:
+  Attacker:
+    King not on board
+  Defender:
+    King(X,Y) = (0, 0)/(10, 0)/(0, 10)/(10, 10)
+    Attacker's set of valid moves is empty
+
+GameState:
+  2D List 11x11:
+    Piece: (attacker/defender) (pawn/king) (location)
+
+GameLoop:
+  Game Setup:
+    King(X,Y) = King Space
+    Defender Pawns: King(X +- a, Y +- b) where |a|+|b| <=2
+    Attacker Pawns: (0, 2<Y<8)and(1,5) rotated 90 deg 3 times
+  Attacker Player:
+    Move Action
+  Win Conditions Check
+  Defender Player:
+    Move Action
+  Win Consitions Check
