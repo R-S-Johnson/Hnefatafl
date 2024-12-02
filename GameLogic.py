@@ -32,7 +32,68 @@ class HnefataflBoard:
             [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
             [0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0]
             ], dtype=int)
+        
+    def capture_piece(self, target):
+        if self.grid[target] != 0:
+            self.captured.append(self.grid[target])
+            self.grid[target] = 0
             
+    def move_piece(self, target, dest):
+        """
+        Checks validity of target and dest,
+        once validated, grid is modified and a
+        capture is checked.
+        Returns False if invalid target or dest,
+        True if the piece successfully moved
+        """
+        if self.grid[target[0], target[1]] != 0:
+            # Piece exists
+            if dest in self.valid_moves(target):
+                self.grid[dest] = self.grid[target]
+                self.grid[target] = 0
+
+                for captured in self.capture_check(dest):
+                    self.capture_piece(captured)
+                
+                return True
+        return False
+    
+    def capture_check(self, target):
+        """
+        target: location of newly moved piece
+        Returns: list - location(s) of captured piece(s)
+        """
+        captured = []
+        
+        player = self.grid[target]
+        op_player = 1 if player==0 else 0
+        row = target[0]
+        col = target[1]
+        
+        # Left
+        if col > 1 and self.grid[row,col-1] == op_player:
+            esc_king_space = (row,col-2) == (0,0) or (row,col-2) == (10,0) or (row,col-2) == (5,5)
+            if self.grid[row,col-2] == player or esc_king_space:
+                captured.append((row,col-1))
+        # Right
+        if col < self.board_size-2 and self.grid[row,col+1] == op_player:
+            esc_king_space = (row,col+2) == (10,0) or (row,col+2) == (10,10) or (row,col+2) == (5,5)
+            if self.grid[row,col+2] == player or esc_king_space:
+                captured.append((row,col+1))
+        # Up
+        if row > 1 and self.grid[row-1,col] == op_player:
+            esc_king_space = (row-2,col) == (0,0) or (row-2,col) == (0,10) or (row-2,col) == (5,5)
+            if self.grid[row-2,col] == player or esc_king_space:
+                captured.append((row-1,col))         
+        # Down
+        if row < self.board_size-2 and self.grid[row+1,col] == op_player:
+            esc_king_space = (row+2,col) == (10,0) or (row+2,col) == (10,10) or (row+2,col) == (5,5)
+            if self.grid[row+2,col] == player or esc_king_space:
+                captured.append((row+1,col))
+        
+        return captured
+
+
     def valid_moves(self, target, king=False):
         """
         Returns a list of tuple coordinates
@@ -92,17 +153,6 @@ class HnefataflBoard:
 
         return valid_moves
     
-    def move_piece(self, target, location):
-        """
-        Checks validity of target and location,
-        once validated, grid is modified and a
-        capture is checked.
-        Returns None if invalid target or location
-        """
-        if self.grid[target[0], target[1]] != 0:
-            # Piece exists
-            pass
-        return None
     
 
 ## TESTING ##
