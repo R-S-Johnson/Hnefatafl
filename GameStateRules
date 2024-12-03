@@ -9,7 +9,6 @@ Board:
  Top Left = (0, 0)
  (5, 5) = King Space, not accessable by Pawn
  (0, 0)/(10, 0)/(0, 10)/(10, 10) = Escape Space, not accessable by Pawn
- (-1, -1) = Captured
 Actions:
   Move: Any piece: ValidSpaceFromXY = Set[a=1->n]EACH[(X +- a, Y)and(X, Y +- a)] where n is distance to next piece
   Capture: If moved piece new (X,Y) creates pattern Piece -> Opposite Piece -> Ally Piece/Escape Space, and Opposite Piece is not King, Opposite Piece is removed from the board

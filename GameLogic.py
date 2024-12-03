@@ -15,10 +15,14 @@ class HnefataflBoard:
         self.attack_pawn = 2
         self.king = 3
         self.captured = []
+        self.king_captured = False
 
         self.setup()
 
     def setup(self):
+        """
+        Setup for the beginning of the game
+        """
         self.grid = np.array([
             [0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0],
             [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
@@ -33,7 +37,24 @@ class HnefataflBoard:
             [0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0]
             ], dtype=int)
         
+    def win_conditions(self):
+        """
+        returns 1 or 2 if defenders or attackers
+        meet win conditions, 0 otherwise
+        """
+        if self.king_captured:
+            return 2
+        row, col = np.where(self.grid==3)
+        row = row[0]
+        col = col[0]
+        if (row == 0 or row == 10) and (col == 0 or col == 10):
+            return 1
+        return 0
+        
     def capture_piece(self, target):
+        """
+        Remove target piece from the board
+        """
         if self.grid[target] != 0:
             self.captured.append(self.grid[target])
             self.grid[target] = 0
@@ -54,9 +75,33 @@ class HnefataflBoard:
 
                 for captured in self.capture_check(dest):
                     self.capture_piece(captured)
+                    
+                self.king_captured = self.king_capture_check()
                 
                 return True
         return False
+    
+    def king_capture_check(self):
+        """
+        True/False - Checks whether or not the king is captured
+        """
+        row, col = np.where(self.grid==3)
+        row = row[0]
+        col = col[0]
+        
+        # Left
+        if row != 0 and self.grid[row-1,col] != 2:
+            return False
+        # Right
+        if row != self.board_size-1 and self.grid[row+1,col] != 2:
+            return False
+        # Up
+        if col != 0 and self.grid[row,col-1] != 2:
+            return False
+        # Down
+        if col != self.board_size-1 and self.grid[row,col+1] != 2:
+            return False
+        return True
     
     def capture_check(self, target):
         """
@@ -65,8 +110,8 @@ class HnefataflBoard:
         """
         captured = []
         
-        player = self.grid[target]
-        op_player = 1 if player==0 else 0
+        player = 1 if self.grid[target]==3 else self.grid[target]
+        op_player = 1 if player==2 else 2
         row = target[0]
         col = target[1]
         
@@ -158,4 +203,6 @@ class HnefataflBoard:
 ## TESTING ##
 if __name__ == "__main__":
     A = HnefataflBoard()
-    print(A.valid_moves((5, 4)))
+    print(A.move_piece((0, 3), (4, 3)))
+    print(A.move_piece((10, 3), (6, 3)))
+    print(A.grid)
