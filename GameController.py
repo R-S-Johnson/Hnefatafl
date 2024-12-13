@@ -6,3 +6,9 @@ class GameController:
         self.game = HnefataflBoard()
         self.window = GameWindow(self)
     
+    
+    
+## TESTING ##
+if __name__ == "__main__":
+    A = GameController()
+    A.window.mainloop()
