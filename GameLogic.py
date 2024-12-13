@@ -208,7 +208,7 @@ class HnefataflBoard:
     
 
 ## TESTING ##
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     A = HnefataflBoard()
 
     board = np.array([
@@ -225,4 +225,4 @@ if __name__ == "__main__":
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ], dtype=int)
     A.set_board(board)
-    print(A.win_conditions())
+    print(A.win_conditions())"""
