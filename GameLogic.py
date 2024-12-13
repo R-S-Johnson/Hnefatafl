@@ -37,6 +37,14 @@ class HnefataflBoard:
             [0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0]
             ], dtype=int)
         
+    def set_board(self, board):
+        """
+        Manually sets the board for testing
+        Not for use in game
+        """
+        self.grid = board
+        self.king_captured = self.king_capture_check()
+        
     def win_conditions(self):
         """
         returns 1 or 2 if defenders or attackers
@@ -138,7 +146,6 @@ class HnefataflBoard:
         
         return captured
 
-
     def valid_moves(self, target, king=False):
         """
         Returns a list of tuple coordinates
@@ -203,6 +210,19 @@ class HnefataflBoard:
 ## TESTING ##
 if __name__ == "__main__":
     A = HnefataflBoard()
-    print(A.move_piece((0, 3), (4, 3)))
-    print(A.move_piece((10, 3), (6, 3)))
-    print(A.grid)
+
+    board = np.array([
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ], dtype=int)
+    A.set_board(board)
+    print(A.win_conditions())
