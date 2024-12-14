@@ -67,7 +67,7 @@ class HnefataflBoard:
             self.captured.append(self.grid[target])
             self.grid[target] = 0
             
-    def move_piece(self, target, dest):
+    def move_piece(self, target, dest, valid_moves=None):
         """
         Checks validity of target and dest,
         once validated, grid is modified and a
@@ -77,7 +77,7 @@ class HnefataflBoard:
         """
         if self.grid[target[0], target[1]] != 0:
             # Piece exists
-            if dest in self.valid_moves(target):
+            if (valid_moves==None and dest in self.valid_moves(target)) or (dest in valid_moves):
                 self.grid[dest] = self.grid[target]
                 self.grid[target] = 0
 

@@ -11,8 +11,6 @@ class GameWindow(tk.Tk):
         # Constants
         self.board_size = 11  # 11x11 board
         self.square_size = 50  # Size of each square in pixels
-        
-        
 
         # Window
         self.canvas = tk.Canvas(self, width=self.board_size * self.square_size,
@@ -40,17 +38,21 @@ class GameWindow(tk.Tk):
         id = 0
         for row in range(self.board_size):
             for col in range(self.board_size):
-                if BOARD_START[row][col] != 0:
-                    x0 = col * self.square_size + 15
-                    y0 = row * self.square_size + 15
-                    x1 = x0 + self.square_size - 30
-                    y1 = y0 + self.square_size - 30
+                x0 = col * self.square_size + 10
+                y0 = row * self.square_size + 10
+                x1 = x0 + self.square_size - 20
+                y1 = y0 + self.square_size - 20
+                if BOARD_START[row][col] != 0 and BOARD_START[row][col] != 3:
                     piece = self.canvas.create_oval(x0, y0, x1, y1,
                                                     fill="red" if BOARD_START[row][col]==2 else "blue",
                                                     tags=("piece", f"{BOARD_START[row][col]}", f"piece_id{id}"))
                     id += 1
                     self.canvas.tag_bind(piece, "<Button-1>", self.on_click)
-                    
+                elif BOARD_START[row][col] == 3:
+                    king = self.canvas.create_oval(x0-5, y0-5, x1+5, y1+5,
+                                                   fill="dark blue",
+                                                   tags=("piece", "king"))
+                    self.canvas.tag_bind(king, "<Button-1>", self.on_click)
 
     def draw_board(self):
         """
@@ -69,14 +71,12 @@ class GameWindow(tk.Tk):
                                              fill=color, outline="black",
                                              tags=f"space_{row}_{col}")
                 
-
-    def draw_piece(self, row, col, player):
-        """
-        Draw piece on board/canvas at location (row, col)
-        """
         
     def on_click(self, event):
         """
         Passes row, col to controller
         to handle board interaction
         """
+        row = event.y//self.square_size
+        col = event.x//self.square_size
+        self.controller.on_click(row, col, self.canvas.gettags("current"))
