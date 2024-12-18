@@ -14,7 +14,7 @@ class HnefataflBoard:
         self.defend_pawn = 1
         self.attack_pawn = 2
         self.king = 3
-        self.captured = []
+        self.last_captured = []
         self.king_captured = False
 
         self.setup()
@@ -64,10 +64,10 @@ class HnefataflBoard:
         Remove target piece from the board
         """
         if self.grid[target] != 0:
-            self.captured.append(self.grid[target])
+            self.last_captured.append(self.grid[target])
             self.grid[target] = 0
             
-    def move_piece(self, target, dest, valid_moves=None):
+    def move_piece(self, target, dest, valid_moves):
         """
         Checks validity of target and dest,
         once validated, grid is modified and a
@@ -75,9 +75,10 @@ class HnefataflBoard:
         Returns False if invalid target or dest,
         True if the piece successfully moved
         """
+        self.last_captured = []
         if self.grid[target[0], target[1]] != 0:
             # Piece exists
-            if (valid_moves==None and dest in self.valid_moves(target)) or (dest in valid_moves):
+            if dest in valid_moves:
                 self.grid[dest] = self.grid[target]
                 self.grid[target] = 0
 
