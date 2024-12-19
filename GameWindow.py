@@ -117,8 +117,13 @@ class GameWindow(tk.Tk):
         x1 = x0 + self.square_size - 20
         y1 = y0 + self.square_size - 20
         
-        self.canvas.coords(target_tag,
-                           x0, y0, x1, y1)
+        if target_tag == 'king':
+            self.canvas.coords(target_tag,
+                               x0-5, y0-5, x1+5, y1+5)
+        else:
+            self.canvas.coords(target_tag,
+                               x0, y0, x1, y1)
+        
     
     def remove_piece(self, target):
         """

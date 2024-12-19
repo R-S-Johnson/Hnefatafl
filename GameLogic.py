@@ -198,11 +198,12 @@ class HnefataflBoard:
                     valid_moves += [(i, col) for i in range(row+1, row+n+2)]
 
         # Remove unusable spaces
-        if self.king_space in valid_moves and not king:
-            valid_moves.remove(self.king_space)
-        for space in self.escape_spaces:
-            if space in valid_moves:
-                valid_moves.remove(space)
+        if not king:
+            if self.king_space in valid_moves:
+                valid_moves.remove(self.king_space)
+            for space in self.escape_spaces:
+                if space in valid_moves:
+                    valid_moves.remove(space)
 
         return valid_moves
     
