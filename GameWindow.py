@@ -92,7 +92,7 @@ class GameWindow(tk.Tk):
         """
         for cell in cells:
             row, col = cell
-            self.canvas.itemconfig(f"space_{row}_{col}", fill="light yellow")
+            self.canvas.itemconfig(f"space_{row}_{col}", fill="gold")
         self.last_highlighted = cells
     
     def dehighlight_cells(self, cells=None):

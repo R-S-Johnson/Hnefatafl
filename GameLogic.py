@@ -64,7 +64,7 @@ class HnefataflBoard:
         Remove target piece from the board
         """
         if self.grid[target] != 0:
-            self.last_captured.append(self.grid[target])
+            self.last_captured.append(target)
             self.grid[target] = 0
             
     def move_piece(self, target, dest, valid_moves):
