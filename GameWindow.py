@@ -23,12 +23,39 @@ class GameWindow(tk.Tk):
         for row in range(self.board_size):
             for col in range(self.board_size):
                 self.canvas.tag_bind(f"space_{row}_{col}", "<Button-1>", self.on_click)
-
                 
         # Remember last highlighted
         self.last_highlighted = []
         
         # Add Pieces
+        self.draw_pieces()
+        
+        # Restart button option: "R"
+        self.bind("<R>", self.on_key_press)
+        
+
+    def draw_board(self):
+        """
+        Draws the game board at game start, tagging each cell
+        for Tkinter integration for easy cell click selection
+        """
+        for row in range(self.board_size):
+            for col in range(self.board_size):
+                color = self.board_colors[(row + col) % 2]
+                x1 = col * self.square_size
+                y1 = row * self.square_size
+                x2 = x1 + self.square_size
+                y2 = y1 + self.square_size
+                self.canvas.create_rectangle(x1, y1, x2, y2,
+                                             fill=color, outline="black",
+                                             tags=f"space_{row}_{col}")
+                
+                
+    def draw_pieces(self):
+        """
+        Draws the pieces for the start of game layout
+        tagging each piece for click integration and access
+        """
         BOARD_START = [[0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0],
                        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -59,22 +86,6 @@ class GameWindow(tk.Tk):
                                                    tags=("piece", "king"))
                     self.canvas.tag_bind(king, "<Button-1>", self.on_click)
 
-    def draw_board(self):
-        """
-        Draws the game board at game start, tagging each cell
-        for Tkinter integration for easy cell click selection
-        """
-        for row in range(self.board_size):
-            for col in range(self.board_size):
-                color = self.board_colors[(row + col) % 2]
-                x1 = col * self.square_size
-                y1 = row * self.square_size
-                x2 = x1 + self.square_size
-                y2 = y1 + self.square_size
-                self.canvas.create_rectangle(x1, y1, x2, y2,
-                                             fill=color, outline="black",
-                                             tags=f"space_{row}_{col}")
-                
         
     def on_click(self, event):
         """
@@ -85,6 +96,13 @@ class GameWindow(tk.Tk):
         col = event.x//self.square_size
         self.controller.on_click(row, col, self.canvas.gettags("current"))
         
+    def on_key_press(self, _):
+        """
+        Passes restart call to Controller
+        """
+        self.controller.restart()
+        
+        
     def highlight_cells(self, cells):
         """
         Used when a piece is selected to
@@ -94,6 +112,7 @@ class GameWindow(tk.Tk):
             row, col = cell
             self.canvas.itemconfig(f"space_{row}_{col}", fill="gold")
         self.last_highlighted = cells
+    
     
     def dehighlight_cells(self, cells=None):
         """
@@ -106,6 +125,7 @@ class GameWindow(tk.Tk):
             for cell in self.last_highlighted:
                 row, col = cell
                 self.canvas.itemconfig(f"space_{row}_{col}", fill=self.board_colors[(row + col) % 2])
+
 
     def move_piece(self, target_tag, dest):
         """
