@@ -27,6 +27,10 @@ class GameController:
         
         
     def restart(self):
+        """
+        Resets aspects of game state
+        to init values
+        """
         for row in range(self.game.board_size):
             for col in range(self.game.board_size):
                 if self.game.grid[(row, col)] != 0:
@@ -41,7 +45,7 @@ class GameController:
     
     def on_click(self, row, col, tags):
         """
-        Initial handling of mouse presses
+        Handling of mouse press events
         """
         print(f"({row}, {col}) {tags}")
         self.last_action = [row, col, tags]
@@ -74,6 +78,11 @@ class GameController:
     
     
     def selected_options(self, tags, row, col):
+        """
+        Inacts game state changes based on
+        player input and the fact that a piece
+        is selected
+        """
         # Expect move or deselect
         if tags[0][:5] == "space":
             # If piece move is successful
@@ -96,6 +105,11 @@ class GameController:
     
     
     def unselected_options(self, tags, row, col):
+        """
+        Inacts game state changes based on
+        player input and the fact that a piece
+        is NOT selected
+        """
         # Expected piece input to select
         if tags[0] == "piece":
             if tags[1] == "king" and self.turn == 1:
