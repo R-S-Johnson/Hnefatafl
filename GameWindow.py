@@ -33,6 +33,9 @@ class GameWindow(tk.Tk):
         # Restart button option: "R"
         self.bind("<R>", self.on_key_press)
         
+        # Button to save last state in logs: "Ctrl+s"
+        self.bind("<Control-s>", self.on_key_press)
+        
 
     def draw_board(self):
         """
@@ -96,11 +99,12 @@ class GameWindow(tk.Tk):
         col = event.x//self.square_size
         self.controller.on_click(row, col, self.canvas.gettags("current"))
         
-    def on_key_press(self, _):
+        
+    def on_key_press(self, event):
         """
-        Passes restart call to Controller
+        Passes key press call to controller.
         """
-        self.controller.restart()
+        self.controller.on_key_press(event)
         
         
     def highlight_cells(self, cells):

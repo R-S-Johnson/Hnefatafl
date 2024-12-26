@@ -1,5 +1,6 @@
 from GameLogic import HnefataflBoard
 from GameWindow import GameWindow
+import json
 
 class GameController:
     def __init__(self):
@@ -16,6 +17,9 @@ class GameController:
         
         # Memory of last set of valid moves
         self.valid_moves = []
+        
+        # Memory of last player action
+        self.last_action = []
         
         # Track GameOver state
         self.game_over = False
@@ -40,6 +44,7 @@ class GameController:
         Initial handling of mouse presses
         """
         print(f"({row}, {col}) {tags}")
+        self.last_action = [row, col, tags]
         
         if self.selected:
             self.selected_options(tags, row, col)
@@ -50,6 +55,22 @@ class GameController:
         if win_cond != 0:
             self.game_over = True
             self.winner = win_cond
+    
+    
+    def on_key_press(self, event):
+        """
+        Handling of key press events
+        "R": Restart
+        "Ctrl+s": Log last state
+        """
+        print(event.state, event.keysym, event.keycode)
+        
+        # Restart
+        if event.char == event.keysym == "R":
+            self.restart()
+        # Log last states
+        elif (event.state & 0x4) and event.keysym == "s":
+            self.log_last_turn()
     
     
     def selected_options(self, tags, row, col):
@@ -90,9 +111,32 @@ class GameController:
                 self.selected_tag = tags[1]
                 self.valid_moves = self.game.valid_moves((row, col))
                 self.window.highlight_cells(self.valid_moves)
+                
+    
+    def log_last_turn(self):
+        """
+        Saves last turn (board state, player action,
+        general memory dump)
+        """
+        log = {
+            "board-state": self.game.grid.tolist(),
+            "player-action": self.last_action,
+            "memory-dump": {
+                "selected-info": {"selected": self.selected,
+                                  "selected-coord": self.selected_coord,
+                                  "tag": self.selected_tag},
+                "turn": self.turn,
+                "game-over-state": {"game-over": self.game_over,
+                                    "winner": self.winner},
+                "captured-info": {f"last-captured": self.game.last_captured,
+                                  "king-captured": self.game.king_captured},
+                "last-highlighted": self.window.last_highlighted
+            }
+        }
+        with open("debug-logs/log-last-turn", 'w') as f:
+            json.dump(log, f, indent=4)
 
     
-## TESTING ##
 if __name__ == "__main__":
     A = GameController()
     A.window.mainloop()
