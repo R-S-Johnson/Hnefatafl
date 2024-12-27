@@ -1,0 +1,1 @@
+from .GameLogic import HnefataflBoard

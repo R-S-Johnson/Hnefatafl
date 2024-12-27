@@ -1,11 +1,11 @@
-from GameLogic import HnefataflBoard
-from GameWindow import GameWindow
+from game import HnefataflBoard
+from window import MainWindow
 import json
 
 class GameController:
     def __init__(self):
         self.game = HnefataflBoard()
-        self.window = GameWindow(self)
+        self.window = MainWindow(self)
         
         # True if a piece is selected
         self.selected = False
@@ -119,7 +119,7 @@ class GameController:
                 self.valid_moves = self.game.valid_moves((row, col),
                                                             king=True)
                 self.window.highlight_cells(self.valid_moves)
-            elif int(tags[2]) == self.turn:
+            elif not (tags[1] == "king" and self.turn != 1) and int(tags[2]) == self.turn:
                 self.selected = True
                 self.selected_coord = (row, col)
                 self.selected_tag = tags[1]
@@ -144,10 +144,10 @@ class GameController:
                                     "winner": self.winner},
                 "captured-info": {f"last-captured": self.game.last_captured,
                                   "king-captured": self.game.king_captured},
-                "last-highlighted": self.window.last_highlighted
+                "last-highlighted": self.window.canvas.last_highlighted
             }
         }
-        with open("debug-logs/log-last-turn", 'w') as f:
+        with open("debug-logs/log-last-turn.json", 'w') as f:
             json.dump(log, f, indent=4)
 
     
