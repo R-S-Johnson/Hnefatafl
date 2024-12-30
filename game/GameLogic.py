@@ -42,7 +42,7 @@ class HnefataflBoard:
         Manually sets the board for testing
         Not for use in game
         """
-        self.grid = board
+        self.grid = np.array(board)
         self.king_captured = self.king_capture_check()
         
     def win_conditions(self):
