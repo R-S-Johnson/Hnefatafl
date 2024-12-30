@@ -3,8 +3,8 @@ import tkinter as tk
 
 class MainWindow(tk.Tk):
     
-    def __init__(self, controller):
-        super().__init__()
+    def __init__(self, controller, **kwargs):
+        super().__init__(**kwargs)
         
         # Controller for passing along user input
         self.controller = controller
@@ -13,11 +13,7 @@ class MainWindow(tk.Tk):
         self.board_size = 11  # 11x11 board
         self.square_size = 50  # Size of each square in pixels
 
-        # Game window
-        self.canvas = GameWindow(self, self.board_size, self.square_size,
-                                 width=self.board_size * self.square_size,
-                                 height=self.board_size * self.square_size)
-        self.canvas.pack()
+        self.build_ui()
 
         # Restart button option: "R"
         self.bind("<R>", self.on_key_press)
@@ -25,15 +21,34 @@ class MainWindow(tk.Tk):
         # Button to save last state in logs: "Ctrl+s"
         self.bind("<Control-s>", self.on_key_press)
 
+    
+    def build_ui(self):
+        # Frame for organizing
+        self.window = tk.Frame(self)
+        self.window.pack()
 
-    def on_board_click(self, row, col, tags):
-        """
-        Passes board click event to
-        controller for handling
-        """
-        self.controller.on_click(row, col, tags)
+        # Game board window
+        self.canvas = GameWindow(self.window, self.controller,
+                                 self.board_size, self.square_size,
+                                 width=self.board_size * self.square_size,
+                                 height=self.board_size * self.square_size)
         
- 
+        # Labels
+        self.title_label = tk.Label(self.window, text="Hnefatafl")
+        self.turn_label = tk.Label(self.window, text="Turn: Attacker")
+
+        # Interact buttons
+        self.restart_button = tk.Button(self.window, command=self.controller.restart,
+                                       text="Restart (Shift+R)")
+        
+        # Grid organization
+        self.canvas.grid(column=0, row=0,
+                         columnspan=8, rowspan=3)
+        self.title_label.grid(column=9, row=0)
+        self.turn_label.grid(column=9, row=1)
+        self.restart_button.grid(column=9, row=2)
+    
+        
     def on_key_press(self, event):
         """
         Passes key press event to

@@ -2,11 +2,14 @@ import tkinter as tk
 
 class GameWindow(tk.Canvas):
         
-    def __init__(self, parent, board_size, square_size, **kwargs):
+    def __init__(self, parent, controller, board_size, square_size, **kwargs):
         super().__init__(parent, **kwargs)
 
         # Parent, root Tk window
         self.parent = parent
+        
+        # Game controller for user input
+        self.controller = controller
 
         # Gameboard constants
         self.board_size = board_size
@@ -86,16 +89,8 @@ class GameWindow(tk.Canvas):
         """
         row = event.y//self.square_size
         col = event.x//self.square_size
-        self.parent.on_board_click(row, col, self.gettags("current"))
-        
-        
-    def on_key_press(self, event):
-        """
-        Passes key press event to
-        parent to handle board interaction
-        """
-        self.parent.on_key_press(event)
-        
+        self.controller.on_click(row, col, self.gettags("current"))
+                
         
     def highlight_cells(self, cells):
         """
