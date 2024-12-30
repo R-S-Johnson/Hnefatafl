@@ -65,21 +65,42 @@ class GameWindow(tk.Canvas):
         id = 0
         for row in range(self.board_size):
             for col in range(self.board_size):
-                x0 = col * self.square_size + 10
-                y0 = row * self.square_size + 10
-                x1 = x0 + self.square_size - 20
-                y1 = y0 + self.square_size - 20
-                if BOARD_START[row][col] != 0 and BOARD_START[row][col] != 3:
-                    piece = self.create_oval(x0, y0, x1, y1,
-                                                    fill="red" if BOARD_START[row][col]==2 else "blue",
-                                                    tags=("piece", f"piece_id{id}", f"{BOARD_START[row][col]}"))
-                    id += 1
-                    self.tag_bind(piece, "<Button-1>", self.on_click)
-                elif BOARD_START[row][col] == 3:
-                    king = self.create_oval(x0-5, y0-5, x1+5, y1+5,
-                                                   fill="dark blue",
-                                                   tags=("piece", "king"))
-                    self.tag_bind(king, "<Button-1>", self.on_click)
+                if BOARD_START[row][col] != 0:
+                    self.draw_piece(row, col, BOARD_START[row][col], id)
+                    if BOARD_START[row][col] != 3:
+                        id += 1
+                        
+
+    def draw_piece(self, row, col, tag, id):
+        """
+        Draws piece at row, col
+        based on player tag
+        """
+        x0 = col * self.square_size + 10
+        y0 = row * self.square_size + 10
+        x1 = x0 + self.square_size - 20
+        y1 = y0 + self.square_size - 20
+        if tag != 3:
+            piece = self.create_oval(x0, y0, x1, y1,
+                                            fill="red" if tag==2 else "blue",
+                                            tags=("piece", f"piece_id{id}", f"{tag}"))
+            self.tag_bind(piece, "<Button-1>", self.on_click)
+        elif tag == 3:
+            king = self.create_oval(x0-5, y0-5, x1+5, y1+5,
+                                            fill="dark blue",
+                                            tags=("piece", "king"))
+            self.tag_bind(king, "<Button-1>", self.on_click)
+
+
+    def set_board(self, board):
+        """
+        Sets board look to match input 2d list
+        """
+        self.delete("current&&piece")
+        for row in range(self.board_size):
+            for col in range(self.board_size):
+                if board[row][col] != 0:
+                    self.draw_piece(row, col, board[row][col])
 
         
     def on_click(self, event):

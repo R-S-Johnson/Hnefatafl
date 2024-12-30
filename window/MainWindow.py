@@ -63,7 +63,13 @@ class MainWindow(tk.Tk):
         Draws the pieces for the start of game layout
         tagging each piece for click integration and access
         """
-        self.canvas.draw_pieces()    
+        self.canvas.draw_pieces()  
+    
+    def set_board(self, board):
+        """
+        Sets board look to match input 2d list
+        """
+        self.canvas.set_board(board)
 
     def highlight_cells(self, cells):
         """
