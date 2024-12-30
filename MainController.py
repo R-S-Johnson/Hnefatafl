@@ -31,10 +31,7 @@ class GameController:
         Resets aspects of game state
         to init values
         """
-        for row in range(self.game.board_size):
-            for col in range(self.game.board_size):
-                if self.game.grid[(row, col)] != 0:
-                    self.window.remove_piece((row, col))
+        self.window.set_board([])
         self.window.draw_pieces()
         self.game = HnefataflBoard()
         self.turn = 2
@@ -70,6 +67,7 @@ class GameController:
         Handling of key press events
         "R": Restart
         "Ctrl+s": Log last state
+        "Ctrl+Shift+L: Load state from log-last-turn.json file"
         """
         print(event.state, event.keysym, event.keycode)
         
@@ -79,6 +77,9 @@ class GameController:
         # Log last states
         elif (event.state & 0x4) and event.keysym == "s":
             self.log_last_turn()
+        # Load debug state json file
+        elif (event.state & 0x4) and event.keysym == "L":
+            self.load_debug_log_last_turn()
     
     
     def selected_options(self, tags, row, col):
@@ -130,6 +131,23 @@ class GameController:
                 self.valid_moves = self.game.valid_moves((row, col))
                 self.window.highlight_cells(self.valid_moves)
                 
+    
+    def load_debug_log_last_turn(self):
+        """
+        Loads the board and turn state
+        from the log-last-turn file in
+        debug logs
+        """
+        with open("debug-logs/log-last-turn.json") as f:
+            log = json.load(f)
+        
+        board = log["board-state"]
+        turn = log["memory-dump"]["turn"]
+        
+        self.game.set_board(board)
+        self.window.set_board(board)
+        self.turn = turn
+    
     
     def log_last_turn(self):
         """

@@ -15,11 +15,13 @@ class MainWindow(tk.Tk):
 
         self.build_ui()
 
+        ### Keyboard input bindings ###
         # Restart button option: "R"
-        self.bind("<R>", self.on_key_press)
-        
+        self.bind("<R>", self.on_key_press)        
         # Button to save last state in logs: "Ctrl+s"
         self.bind("<Control-s>", self.on_key_press)
+        # Load state from debug-logs
+        self.bind("<Control-L>", self.on_key_press)
 
     
     def build_ui(self):
