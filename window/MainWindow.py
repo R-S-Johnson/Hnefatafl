@@ -49,6 +49,14 @@ class MainWindow(tk.Tk):
         self.title_label.grid(column=9, row=0)
         self.turn_label.grid(column=9, row=1)
         self.restart_button.grid(column=9, row=2)
+        
+        
+    def turn_rotate(self, turn):
+        """
+        Sets turn label for turn swaps
+        """
+        turn_label = 'Attacker' if turn == 2 else 'Defender'
+        self.turn_label.config(text=f"Turn: {turn_label}")
     
         
     def on_key_press(self, event):

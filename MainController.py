@@ -51,8 +51,7 @@ class GameController:
             tmp_turn = self.turn
             self.selected_options(tags, row, col)
             if tmp_turn != self.turn:
-                turn_label = 'Attacker' if self.turn == 2 else 'Defender'
-                self.window.turn_label.config(text=f"Turn: {turn_label}")
+                self.window.turn_rotate(self.turn)
         else:
             self.unselected_options(tags, row, col)     
         # Edit GameOver state based on win conditions
@@ -147,8 +146,7 @@ class GameController:
         self.game.set_board(board)
         self.window.set_board(board)
         self.turn = turn
-        label = "Attacker" if turn==2 else "Defender"
-        self.window.turn_label.config(text=f"Turn: {label}")
+        self.window.turn_rotate(turn)
     
     
     def log_last_turn(self):
