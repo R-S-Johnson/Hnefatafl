@@ -132,7 +132,7 @@ class HnefataflBoard:
                 captured.append((row,col-1))
         # Right
         if col < self.board_size-2 and self.grid[row,col+1] == op_player:
-            esc_king_space = (row,col+2) == (10,0) or (row,col+2) == (10,10) or (row,col+2) == (5,5)
+            esc_king_space = (row,col+2) == (0,10) or (row,col+2) == (10,10) or (row,col+2) == (5,5)
             op_king = (self.grid[row,col+2] == 3) and player == 1
             if self.grid[row,col+2] == player or esc_king_space or op_king:
                 captured.append((row,col+1))
