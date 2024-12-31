@@ -147,6 +147,8 @@ class GameController:
         self.game.set_board(board)
         self.window.set_board(board)
         self.turn = turn
+        label = "Attacker" if turn==2 else "Defender"
+        self.window.turn_label.config(text=f"Turn: {label}")
     
     
     def log_last_turn(self):

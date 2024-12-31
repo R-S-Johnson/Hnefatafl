@@ -96,11 +96,13 @@ class GameWindow(tk.Canvas):
         """
         Sets board look to match input 2d list
         """
-        self.delete("current&&piece")
-        for row in range(self.board_size):
-            for col in range(self.board_size):
+        self.delete("piece")
+        id = 0
+        for row in range(len(board)):
+            for col in range(len(board)):
                 if board[row][col] != 0:
-                    self.draw_piece(row, col, board[row][col])
+                    self.draw_piece(row, col, board[row][col], id)
+                    id += 1
 
         
     def on_click(self, event):
