@@ -4,9 +4,6 @@ class GameWindow(tk.Canvas):
         
     def __init__(self, parent, controller, board_size, square_size, **kwargs):
         super().__init__(parent, **kwargs)
-
-        # Parent, root Tk window
-        self.parent = parent
         
         # Game controller for user input
         self.controller = controller
