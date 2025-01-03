@@ -38,12 +38,29 @@ class GameController:
         self.game_over = False
         self.winner = None
         self.selected = False
+        self.window.game_over_state(self.turn, off=True)
+        
+        
+    def end_game_state(self, winner):
+        """
+        Innitiates end game state,
+        so no more moves may be made,
+        the winner is displayed instead
+        of turn, and restart button is
+        highlighted.
+        """
+        self.game_over = True
+        self.winner = winner
+        self.window.game_over_state(winner)
         
     
     def on_click(self, row, col, tags):
         """
         Handling of mouse press events
         """
+        if self.game_over:
+            return
+        
         print(f"({row}, {col}) {tags}")
         self.last_action = [row, col, tags]
         
@@ -57,8 +74,7 @@ class GameController:
         # Edit GameOver state based on win conditions
         win_cond = self.game.win_conditions()
         if win_cond != 0:
-            self.game_over = True
-            self.winner = win_cond
+            self.end_game_state(win_cond)
     
     
     def on_key_press(self, event):
@@ -137,6 +153,7 @@ class GameController:
         from the log-last-turn file in
         debug logs
         """
+        self.restart()
         with open("debug-logs/log-last-turn.json") as f:
             log = json.load(f)
         
@@ -147,6 +164,9 @@ class GameController:
         self.window.set_board(board)
         self.turn = turn
         self.window.turn_rotate(turn)
+        
+        if log["memory-dump"]["game-over-state"]["game-over"]:
+            self.end_game_state(log["memory-dump"]["game-over-state"]["winner"])
     
     
     def log_last_turn(self):

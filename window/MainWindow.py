@@ -42,6 +42,7 @@ class MainWindow(tk.Tk):
         # Interact buttons
         self.restart_button = tk.Button(self.window, command=self.controller.restart,
                                        text="Restart (Shift+R)")
+        self.orig_color = self.restart_button.cget("background")
         
         # Grid organization
         self.canvas.grid(column=0, row=0,
@@ -57,6 +58,25 @@ class MainWindow(tk.Tk):
         """
         turn_label = 'Attacker' if turn == 2 else 'Defender'
         self.turn_label.config(text=f"Turn: {turn_label}")
+        
+        
+    def game_over_state(self, winner, off=False):
+        """
+        Sets label for the winner
+        and highlights the restart
+        button for game over state
+        (vice versa with off=True,
+        winner interprated as turn)
+        """
+        if off:
+            turn_label = 'Attacker' if winner == 2 else 'Defender'
+            self.turn_label.config(text=f"Turn: {turn_label}")
+            self.restart_button.config(bg=self.orig_color)
+            return
+
+        turn_label = 'Attacker' if winner == 2 else 'Defender'
+        self.turn_label.config(text=f"Winner: {turn_label}")
+        self.restart_button.config(bg="yellow")
     
         
     def on_key_press(self, event):
