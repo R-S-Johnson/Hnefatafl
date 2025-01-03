@@ -126,27 +126,31 @@ class HnefataflBoard:
         
         # Left
         if col > 1 and self.grid[row,col-1] == op_player:
-            esc_king_space = (row,col-2) == (0,0) or (row,col-2) == (10,0) or (row,col-2) == (5,5)
+            esc_space = (row,col-2) == (0,0) or (row,col-2) == (10,0)
+            king_space = (row,col-2) == (5,5) and self.grid[row,col-2] != 3
             op_king = (self.grid[row,col-2] == 3) and player == 1
-            if self.grid[row,col-2] == player or esc_king_space or op_king:
+            if self.grid[row,col-2] == player or esc_space or king_space or op_king:
                 captured.append((row,col-1))
         # Right
         if col < self.board_size-2 and self.grid[row,col+1] == op_player:
-            esc_king_space = (row,col+2) == (0,10) or (row,col+2) == (10,10) or (row,col+2) == (5,5)
+            esc_space = (row,col+2) == (0,10) or (row,col+2) == (10,10)
+            king_space = (row,col+2) == (5,5) and self.grid[row,col+2] != 3
             op_king = (self.grid[row,col+2] == 3) and player == 1
-            if self.grid[row,col+2] == player or esc_king_space or op_king:
+            if self.grid[row,col+2] == player or esc_space or king_space or op_king:
                 captured.append((row,col+1))
         # Up
         if row > 1 and self.grid[row-1,col] == op_player:
-            esc_king_space = (row-2,col) == (0,0) or (row-2,col) == (0,10) or (row-2,col) == (5,5)
+            esc_space = (row-2,col) == (0,10) or (row-2,col) == (0,0)
+            king_space = (row-2,col) == (5,5) and self.grid[row-2,col] != 3
             op_king = (self.grid[row-2,col] == 3) and player == 1
-            if self.grid[row-2,col] == player or esc_king_space or op_king:
+            if self.grid[row-2,col] == player or esc_space or king_space or op_king:
                 captured.append((row-1,col))         
         # Down
         if row < self.board_size-2 and self.grid[row+1,col] == op_player:
-            esc_king_space = (row+2,col) == (10,0) or (row+2,col) == (10,10) or (row+2,col) == (5,5)
+            esc_space = (row+2,col) == (10,10) or (row+2,col) == (10,0)
+            king_space = (row+2,col) == (5,5) and self.grid[row+2,col] != 3
             op_king = (self.grid[row+2,col] == 3) and player == 1
-            if self.grid[row+2,col] == player or esc_king_space or op_king:
+            if self.grid[row+2,col] == player or esc_space or king_space or op_king:
                 captured.append((row+1,col))
         
         return captured
