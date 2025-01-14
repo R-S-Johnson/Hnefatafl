@@ -1,11 +1,15 @@
 from game import HnefataflBoard
 from window import MainWindow
 import json
+import sys
 
 class GameController:
-    def __init__(self):
+    def __init__(self, debug_bool=False):
         self.game = HnefataflBoard()
         self.window = MainWindow(self)
+        
+        # True if ran in debug mode
+        self.debug_mode = debug_bool
         
         # True if a piece is selected
         self.selected = False
@@ -90,10 +94,10 @@ class GameController:
         if event.char == event.keysym == "R":
             self.restart()
         # Log last states
-        elif (event.state & 0x4) and event.keysym == "s":
+        elif (event.state & 0x4) and event.keysym == "s" and self.debug_mode:
             self.log_last_turn()
         # Load debug state json file
-        elif (event.state & 0x4) and event.keysym == "L":
+        elif (event.state & 0x4) and event.keysym == "L" and self.debug_mode:
             self.load_debug_log_last_turn()
     
     
@@ -194,6 +198,6 @@ class GameController:
 
     
 if __name__ == "__main__":
-    A = GameController()
+    A = GameController(sys.argv[1])
     A.window.mainloop()
     
