@@ -1,7 +1,6 @@
 from game import HnefataflBoard
 from window import MainWindow
 import json
-import sys
 
 class GameController:
     def __init__(self, debug_bool=False):
@@ -28,6 +27,13 @@ class GameController:
         # Track GameOver state
         self.game_over = False
         self.winner = None
+        
+        
+    def mainLoop(self):
+        """
+        Passes mainLoop call to the window
+        """
+        self.window.mainloop()
         
         
     def restart(self):
@@ -195,9 +201,3 @@ class GameController:
         }
         with open("debug-logs/log-last-turn.json", 'w') as f:
             json.dump(log, f, indent=4)
-
-    
-if __name__ == "__main__":
-    A = GameController(sys.argv[1])
-    A.window.mainloop()
-    
