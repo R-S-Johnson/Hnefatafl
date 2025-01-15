@@ -19,9 +19,9 @@ The only cla integrated is a debug mode turned on with "--debug-mode". However t
 ## Game Instructions
 All pieces (king and pawns) move in the same way: in straight lines along rows and columns. They can move any number of squares in one direction, but cannot jump over other pieces.
 The 4 corners (where the king needs to escape to) and the center of the board are off limits to any pawns, however pawns **can** jump over the center tile if unocupied.
-# Capturing
+### Capturing
 If a pawn moves next to an enemy pawn and there is a friendly pawn on the opposite side of the enemy pawn, that pawn is captured and removed from the board. Note that this does not work in reverse, if a pawn moves between 2 enemy pawns it is not captured. In addition to this, the center and corner spaces, if unocupied, act as enemy pawns to both attacker and defender pawns for the purpose of capturing. Capturing the king works differently and also ends the game
-# Ending the Game
+### Ending the Game
 The defender wins if they move the king to one of the 4 corners of the board. The attacker wins if they capture the king, which requires attacker pawns to move to all 4 sides of the king, rendering it unable to move.
 Once the game is over no more pieces can be moved and the simulation must be restarted.
 
